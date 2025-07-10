@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Counter</title>
+    <script src="saferEval.js"></script>
+    <script src="keychains.js"></script>
+    <script src="vars.js"></script>
+    <script src="caches.js"></script>
+    <script src="evts.js"></script>
+    <script src="lists.js"></script>
+    <script src="queries.js"></script>
+    <meta
+      data-var
+      id="count"
+      data-type="number"
+      data-value="0"
+      data-cache="localstorage"
+      data-cacheable="data-value"
+    />
+    <meta
+      data-var
+      id="response-body"
+      data-type="object"
+      data-value='{"results": []}'
+    />
+    <meta
+      data-var
+      id="previous-link"
+      data-type="string"
+      data-variable
+      data-variable-data-value="#response-body"
+      data-variable-data-value-pointer="previous"
+    />
+    <meta
+      data-var
+      id="next-link"
+      data-type="string"
+      data-variable
+      data-variable-data-value="#response-body"
+      data-variable-data-value-pointer="next"
+    />
+    <meta
+      data-var
+      id="get-pokemon-url"
+      data-type="string"
+      data-value="https://pokeapi.co/api/v2/pokemon"
+    />
+    <meta
+      data-query
+      id="get-pokemon"
+      data-variable
+      data-variable-data-url="#get-pokemon-url"
+    />
+  </head>
+  <body data-evt-load="fetch:#get-pokemon:#response-body">
+    <button data-evt-click="setvar:#count:prev+1" type="button">+1</button>
+    <button data-evt-click="setvar:#count:prev*2" type="button">x2</button>
+    <button data-evt-click="setvar:#count:0" type="button">0</button>
+    <div>You've counted to <span data-variable="#count"></span></div>
+
+    <template id="pokemon-card">
+      <li>
+        <a data-part="name" data-part-href="url"></a>
+      </li>
+    </template>
+    <ul
+      data-list-template="#pokemon-card"
+      data-list="#response-body"
+      data-list-pointer="results"
+    ></ul>
+    <div style="display: flex; gap: 1rem">
+      <button data-evt-click="setvar:#get-pokemon-url:$.vars['#previous-link']">
+        Previous
+      </button>
+      <div
+        data-variable="#response-body"
+        data-variable-pointer="results.length"
+      ></div>
+      <button data-evt-click="setvar:#get-pokemon-url:$.vars['#next-link']">
+        Next
+      </button>
+    </div>
+  </body>
+</html>
