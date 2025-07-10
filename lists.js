@@ -19,13 +19,12 @@
       listEl.appendChild(evaluateTemplate(templateEl, entry))
     );
 
-    const static = listEl.hasAttribute("data-static");
-    if (!static && !listEl.subscribedToList) {
-      subscribeToList(listEl, listSel);
-    }
+    subscribeToList(listEl, listSel);
   }
 
   function subscribeToList(listEl, listSel) {
+    const static = listEl.hasAttribute("data-static");
+    if (static || listEl.subscribedToList) return;
     const listContainerEl = document.querySelector(listSel);
     const observer = new MutationObserver(() => {
       fillListForEl(listEl);
@@ -34,7 +33,7 @@
       attributeFilter: ["data-value"],
       attributes: true,
     });
-    listEl.subscribeToList = true;
+    listEl.subscribedToList = true;
   }
 
   function evaluateTemplate(templateEl, listEntry) {
